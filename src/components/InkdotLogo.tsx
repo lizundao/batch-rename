@@ -1,0 +1,39 @@
+interface InkdotLogoProps {
+  size?: number;
+  color?: string;
+  className?: string;
+}
+
+/** 应用统一 LOGO（墨点条形标识），默认随主题强调色变色 */
+export function InkdotLogo({
+  size = 32,
+  color = "currentColor",
+  className,
+}: InkdotLogoProps) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 1238 1024"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      role="img"
+    >
+      <path d="M0 69.189189h208.873024v156.654768H0z" fill={color} />
+      <path d="M141.250382 0h156.654768v287.200408h-156.654768z" fill={color} />
+      <path
+        d="M377.2769 65.27282h861.601223v156.654768h-861.601223zM0 435.239164h638.36818v156.654768H0z"
+        fill={color}
+      />
+      <path d="M506.778174 369.966344h156.654768v287.200408h-156.654768z" fill={color} />
+      <path
+        d="M733.144314 435.239164h505.733809v156.654768H733.144314zM0 800.766956h956.116267v156.654768H0z"
+        fill={color}
+      />
+      <path
+        d="M872.305966 736.799592h156.654768v287.200408h-156.654768zM1098.672106 800.766956h140.206017v156.654768h-140.206017z"
+        fill={color}
+      />
+    </svg>
+  );
+}
