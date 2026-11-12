@@ -161,5 +161,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           draft: true
+          # 显式绑定 tag，否则草稿会落在 untagged-* 上，发布后链接不稳定。
+          tag_name: ${{ github.ref_name }}
+          target_commitish: ${{ github.sha }}
           generate_release_notes: true
           files: artifacts/**/*
