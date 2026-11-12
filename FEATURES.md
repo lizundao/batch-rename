@@ -150,15 +150,15 @@ interface AutoNumberConfig {
   start: number;
   padding: number;
   suffix: string;
-  numberType: 'arabic'; // 后续扩展 roman | alpha
+  numberType: 'arabic' | 'roman' | 'alpha';
 }
 
 interface InsertConfig {
   contentType: 'text' | 'serial' | 'file-info';
   position: 'start' | 'end' | 'index';
   text: string;
-  index?: number;
-  fileInfoField?: 'created' | 'modified' | 'size';
+  index: number;
+  fileInfoField: 'created' | 'modified' | 'size' | 'width' | 'height' | 'dimensions' | 'exif-taken' | 'id3-title' | 'id3-artist' | 'id3-album' | 'id3-year';
 }
 
 interface SmartRenameConfig {
@@ -174,7 +174,7 @@ interface SmartRenameConfig {
 |---------|------|------|------|
 | `load_paths` | 1 | ✅ | 加载文件/文件夹路径 |
 | `get_file_metadata` | 3/6 | — | 读取文件元数据（当前合并在 load_paths） |
-| `validate_rename` | 7 | — | 校验重命名操作（当前在前端完成） |
+| `validate_rename` | 7 | ✅ | 文件名与路径合法性校验（在 Rust 命令内完成，前端同步做预览校验） |
 | `execute_rename` | 7 | ✅ | 执行批量重命名 |
 | `rollback_rename` | 7 | ✅ | 回滚已成功的重命名 |
 
@@ -187,14 +187,19 @@ interface SmartRenameConfig {
 - [x] A.3 文件加载 / 重命名在 Rust 后台线程（`spawn_blocking`）执行
 - [x] A.4 任务状态独立管理（`TaskState`），UI 仅订阅状态展示进度
 - [x] A.5 计算进行中保留上次预览，避免界面空白或卡顿
+- [x] A.6 所有模式统一使用 Worker 预览，列表所见即执行所得
+- [x] A.7 Worker 带超时与崩溃重建；高风险正则静态拒绝，取消的任务显式 settle
+- [x] A.8 Rust 侧两阶段临时名事务：支持交换与链式改名，绝不覆盖目标，失败自动放回原名
+- [x] A.9 严格 CSP、`withGlobalTauri: false`、`panic = "abort"`、渲染异常降级页
 
 ---
 
 ## 当前进度
 
-**已完成：阶段 0 ~ 8 核心 + 扩展（除 EXIF/ID3/回滚/多语言）**
+**已完成：阶段 0 ~ 8 核心 + 扩展（含 EXIF/ID3、回滚与多语言）。**
 
-**功能清单已全部完成。** 后续可按需打磨 UI 或增加新能力。
+**功能清单已全部完成。** 回归检查见 `npm run test:regression` 与
+`cargo test --manifest-path src-tauri/Cargo.toml --lib`；后续可按需打磨 UI 或增加新能力。
 
 运行开发环境：
 
